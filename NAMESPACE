@@ -1,0 +1,27 @@
+import(flexmix)
+import(graphics)
+import(methods)
+
+
+export(
+	coefglm,
+	coefmclust,
+	flexmix.Density,
+	flexmix.Estimate,
+	FLXmclust.Density,
+	FLXmclust.Estimate
+      )
+
+exportClasses(
+		TLE,
+		summary.TLE
+	     )
+
+exportMethods(
+		tleplot,
+		TLE,
+		summary,
+		show,
+		plot,
+		estimate
+	     )
