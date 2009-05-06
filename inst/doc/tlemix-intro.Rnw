@@ -1,13 +1,14 @@
 \documentclass[JSS]{vignette}
 
-\title{TLEmix: A General Framework for Robust Fitting of Finite Mixture Models in \proglang{R}}
+\title{tlemix: A General Framework for Robust Fitting of Finite Mixture Models in \proglang{R}}
 
-%\subtitle{\pkg{TLEmix} version \Sexpr{packageDescription("tlemix",fields="Version")}\\\today}
+%\subtitle{\pkg{tlemix} version \Sexpr{packageDescription("tlemix",fields="Version")}\\\today}
 
-\Plaintitle{TLEmix: A General Framework for Robust Fitting of Finite Mixture Models in R} 
-\Shorttitle{TLEmix: Robust Fitting of Finite Mixture Models in \proglang{R}}
+\Plaintitle{tlemix: A General Framework for Robust Fitting of Finite Mixture Models in R} 
+\Shorttitle{tlemix: Robust Fitting of Finite Mixture Models in \proglang{R}}
 
-\author{Raja Patnaik, Alexander Eisl, Roland Boubela, and Peter Filzmoser\\Vienna University of Technology} 
+\author{Raja Patnaik, Alexander Eisl, Roland Boubela, and Peter Filzmoser\\Vienna University of Technology\\[2mm]
+{\large \bf Neyko Neykov and Plamen Neytchev}\\Bulgarian Academy of Sciences} 
 \Plainauthor{Raja Patnaik}
 
 \usepackage[utf8]{inputenc}
@@ -23,7 +24,7 @@ data(gaussData)
 @
 
 \Abstract{
-  TLEmix implements a general framework for robustly fitting
+  tlemix implements a general framework for robustly fitting
   discrete mixtures of regression models in the \R{} statistical
   computing environment. It implements the FAST-TLE algorithm
   and uses the R package FlexMix as a computational engine for 
@@ -34,6 +35,7 @@ data(gaussData)
 \Plainkeywords{R, finite mixture models, model based clustering, robustness}
 
 \Address{
+  {\bf Correspondence to:} \\
   Peter Filzmoser \\
   Department of Statistics and Probability Theory \\
   Vienna University of Technology \\
@@ -43,7 +45,7 @@ data(gaussData)
 }
 
 %%\usepackage{Sweave} %% already provided by jss.cls
-%%\VignetteIndexEntry{TLEmix: A General Framework for Robust Fitting of Finite Mixture Models in R}}
+%%\VignetteIndexEntry{tlemix: A General Framework for Robust Fitting of Finite Mixture Models in R}}
 %%\VignetteDepends{tlemix}
 %%\VignetteKeywords{R, finite mixture models, model based clustering, robustness}
 %%\VignettePackage{tlemix}
@@ -53,9 +55,9 @@ data(gaussData)
 \section{Introduction}
 \label{sec:introduction}
 
-The initial approach to mixture analysis was first undertaken by the biometrician Karl Pearson when he was given a data set by the famous zoologist Walter Frank Raphael Weldon in 1894. In his extensive data analysis Pearson fitted a model consisting of two normal probability density functions with different means ($\mu_1$ and $\mu_2$) and different variances ($\sigma_1^2$ and $\sigma_2^2$) in proportions $\pi_1$ and $\pi_2$ to the data. Although he did not use maximum likelihood to fit the model Pearson's estimation involving the method of moments was nearly as accurate (see \cite{MP2000}).
+The initial approach to mixture analysis was first undertaken by the biometrician Karl Pearson when he was given a data set by the famous zoologist Walter Frank Raphael Weldon in 1894. In his extensive data analysis Pearson fitted a model consisting of two normal probability density functions with different means ($\mu_1$ and $\mu_2$) and different variances ($\sigma_1^2$ and $\sigma_2^2$) in proportions $\pi_1$ and $\pi_2$ to the data. Although he did not use maximum likelihood to fit the model Pearson's estimation involving the method of moments was nearly as accurate \citep[see][]{MP2000}.
     
-Since then finite mixture models have found a variety of applications over almost 100 years, but have experienced a significant boost in popularity during the last decade as available computing power has been growing exponentially. In particular, the 1977 published approach of the EM algorithm lead to increasing interest in finite mixture models as it tremendously simplified the maximum likelihood estimation. This paper is therefore organised as follows: First the basic concept of trimmed likelihood estimation as well as the FAST-TLE algorithm implemented by TLEmix are discussed. Section \ref{sec:using-tlemix} then demonstrates how to use TLEmix to robustly fit finite mixture models. 
+Since then finite mixture models have found a variety of applications over almost 100 years, but have experienced a significant boost in popularity during the last decade as available computing power has been growing exponentially. In particular, the 1977 published approach of the EM algorithm lead to increasing interest in finite mixture models as it tremendously simplified the maximum likelihood estimation. This paper is therefore organised as follows: First the basic concept of trimmed likelihood estimation as well as the FAST-TLE algorithm implemented by tlemix are discussed. Section \ref{sec:using-tlemix} then demonstrates how to use tlemix to robustly fit finite mixture models. 
 
 % All computations and graphics in this paper have been done with
 % \pkg{tlemix} version 0.0-2 and \R{} version 2.7.0 using Sweave.
@@ -64,42 +66,78 @@ Since then finite mixture models have found a variety of applications over almos
 \label{sec:tle}
 
 \subsection{The Weighted Trimmed Likelihood Estimator}
- Let the observations $y_1,\ldots,y_n$ denote values generated by an arbitrary probability density function $\varphi(y;\theta)$ with unknown parameter vector $\theta \in \Theta^p \subset \mathbb{R}^p$. Then, according to \cite{VN1998}, the Weighted Trimmed Likelihood Estimator (WTLE) is given by
+ Let the observations $y_1,\ldots,y_n$ denote values generated by an arbitrary probability density function $\varphi(y;\theta)$ with unknown parameter vector $\theta \in \Theta^p \subset \mathbb{R}^p$. Then, according to \cite{VN1998}, the Weighted Trimmed Likelihood Estimator (WTLE) is difined as
     \begin{equation}
     WTLE(k) (y_1,\ldots,y_n) = \hat{\theta}_{WTLE} = \arg \min_{\theta \in \Theta^p} \sum_{i=1}^k w_{\nu(i)} f(y_{\nu(i)}; \theta),\label{wtle}
     \end{equation}
-    where $f(y_i; \theta)$ corresponds to $- \log \varphi(y_i;\theta)$ and $f(y_{\nu(1)}; \theta) \leq f(y_{
-   \nu(2)}; \theta) \leq \ldots \leq f(y_{\nu(n)}; \theta)$ are the ordered density values for a fixed $\theta$. The permutation $\nu= (\nu(1),\ldots,\nu(n))$ of the indices $1,\ldots,n$ may depend on $\theta$ as well.
+where $f(y_{\nu(1)};\theta) \leq f(y_{\nu(2)};\theta) \leq \ldots \leq 
+f(y_{\nu(n)};\theta)$ for a fixed $\theta$,
+$f(y_{i};\theta)=-\log\varphi(y_{i};\theta)$,
+$y_i \in   I\hskip -3.5pt R^q$ for  $i=1,\ldots, n$ are i.i.d. observations with
+probability density $\varphi(y;\theta)$, which depends on an unknown parameter
+$\theta\in \Theta^{p} \subset I\hskip -3.5pt R^p$,
+$\nu=(\nu(1),\ldots, \nu(n))$ is the corresponding permutation of the indices,
+which depends on $\theta$, $k$ is the trimming parameter and the weights  $w_i
+\ge 0$ for $i=1,\ldots,n$ are nondecreasing functions of $f(y_i,\theta)$ such 
+that at least $w_{\nu(k)} >0$.
+
+The basic idea behind trimming in (\ref{wtle}) is the removal of those
+$n-k$ observations whose values would be highly unlikely to occur if the fitted
+model was true. 
+
+The WTLE is a combinatorial estimator according to the representation
+$$
+\mathop {\min }\limits_{\theta\in \Theta^{p}} \sum \limits_{i = 1}^k
+w_{\nu(i)} f(y_{\nu(i)};\theta) =
+\mathop {\min }\limits_{\theta\in \Theta^{p}} \mathop {\min }\limits_{I \in I_k
+} \sum\limits_{i \in I} w_i f (y_i;\theta) = \mathop {\min }\limits_{I \in I_k
+} \mathop {\min }\limits_{\theta\in \Theta^{p}} \sum\limits_{i \in I} w_i f
+(y_i;\theta),
+$$
+where $I_k$ is the set of all $k$--subsets of the set $\{1,\ldots,n\}$. 
+Therefore, it
+follows that all possible $(^{n}_{k})$ partitions of the data have to be fitted
+by the MLE, and the WTLE is given by the partition with the minimal negative log likelihood.
+
    
-   Depending on the nondecreasing weight function $w_{\nu(i)}$ with $w_i \geq 0$ for $i=1,\ldots,n$ (at least $w_{\nu(k)} > 0$), the WTLE can accommodate different estimators. The median likelihood estimator MedLE(k) defined by \cite{NN1990}
+   The WTLE accommodates different estimators depending on the weights. For instance, the median likelihood estimator MedLE(k) defined by \cite{VN1993}
    \begin{equation}
-   \text{MedLE}(y_1,\ldots,y_n) = \arg \min_{\theta \in \Theta^p} \underset{i}{\operatorname{med}} (- \ln \varphi(y_i; \theta)),\label{medle}
+   \text{MedLE}(y_1,\ldots,y_n) = = \hat{\theta}_{MedLE} = \arg \min_{\theta \in \Theta^p} \underset{i}{\operatorname{med}} (- \ln \varphi(y_i; \theta)),\label{medle}
    \end{equation}
-   is obtained by $w_{\nu(i)}=0$ for $i=1,\ldots,k-1,k+1,\ldots,n$ and $w_{\nu(k)} = 1$, and the TLE
+   is obtained by $w_{\nu(i)}=0$ for $i=1,\ldots,k-1,k+1,\ldots,n$ and $w_{\nu(k)} = 1$, and the TLE  defined by \cite{NN1990}
    \begin{equation}
-   \text{TLE}(k) (y_1,\ldots,y_n) = \arg \min_{\theta \in \Theta^p} \sum_{i=1}^k \left\lbrace - \ln(\varphi(y;\theta))_{(i)} \right\rbrace,\label{tle}
+   \text{TLE}(k) (y_1,\ldots,y_n) = \hat{\theta}_{TLE}= \arg \min_{\theta \in \Theta^p} \sum_{i=1}^k \left\lbrace - \ln(\varphi(y;\theta))_{(i)} \right\rbrace,\label{tle}
    \end{equation}
    is obtained if $w_{\nu(i)}=1$ for $i=1,\ldots,k$ and $w_{\nu(i)}=0$ otherwise.
    
-   From a combinatorial point of view the WTLE yields the minima by subsampling the data:
-   \begin{equation}
-   \min_{\theta \in \Theta^p} \sum_{i=1}^k \left\lbrace w_{\nu(i)} f(y_{\nu(i)};\theta) \right\rbrace= \min_\tau \min_{\theta \in \Theta^p} \sum_{i=1}^k \left\lbrace w_i f(y_{\tau(i)};\theta) \right\rbrace,
-   \end{equation}
-   where $\tau = (\tau(1),\ldots,\tau(n))$ denotes any permutation of the indices, so that all $k$ subsets of the set $\lbrace 1,\ldots,n \rbrace$ are considered.
 
 \subsection{The FAST-TLE Algorithm}
 \label{sec:fast-tle}
 
-Recalling the definition of the WTLE in Eq. (\ref{wtle}) it is assumed that minimisation is achieved by subsampling the data. In view of the combinatorial nature of the algorithm, computing the WTLE for large data sets can proceed very slowly. Thus, an approximative solution was developed in \cite{NM2003}.
-   
-   The general idea is to divide the algorithm into two separate, iterative processes. The trial step consists of drawing finitely many random subsamples of size $k^*$. In the following, for any one of those the ML estimate is computed and the subsamples of size $k$ with the lowest TL values are kept for further processing. This way in every step those sets are selected, which give an improved fit of the model. However, given, a small data set is being processed, all possible subsets with size $k$ can be considered.
-   
-   Continuing this iterative procedure yields guaranteed convergence of the algorithm as there are only $\binom{n}{k}$ $k$-subsets in all. To assure that there always exists a solution to the optimisation problem in Eq. (\ref{wtle}), it is assumed that the finite set $F$ is $d$-full and $k \leq d$. Note that in the normal linear regression case the FAST-TLE reduces to the FAST-LTS algorithm.
-   
-   As for the choice of $k$, a reasonable value would be $\lfloor (n+d+1)/2 \rfloor$ as it would maximise the BP of the TLE algorithm. However, any value between $d$ and $n$ can be chosen for $k$. The size $k^*$ of the subsamples largely depends on the fullness parameter $d$ and can be defined as $k^* = d + 1$ in order to increase the chance of drawing at least one outlier free subsample (see \cite{NM2003}).
+Recalling the definition of the WTLE in Eq. (\ref{wtle}) it is assumed that minimisation is achieved by subsampling the data. In view of the combinatorial nature of the algorithm, computing the WTLE for large data sets can proceed very slowly. Fortunately, an approximate algorithm called the FAST-TLE was developed by \cite{NM2003}.
+The basic idea of this algorithm consists of carrying out finitely many times a two-step procedure: a trial step followed by a refinement step. In the trial step a subsample of size $k^{*}$ is selected 
+randomly from the data sample. The model is fitted to these $k^{*}$ observations to get $\hat{\theta^{*}}$ a trial ML estimate.  The refinement step is based on the so called concentration procedure: (a) Set $\hat{\theta}^{(c)}=\hat{\theta}^{(*)}$; (b) The cases with the $k$ smallest negative log likelihoods evaluated on the current estimate $\hat{\theta^{c}}$ are found; (b) Fitting the model to these $k$ cases gives an improved fit and let  $\hat{\theta}^{(imp)}$ be the corresponding esitmate; (c) Set $\hat{\theta}^{(c)}=\hat{\theta}^{(imp)}$. Repeating (b) and (c) yields an iterative process. The convergence is always  guaranteed after a finite number of steps since there are only finitely many $k$--subsets out of $(^{n}_{k})$. 
 
-\pagebreak[4]
-\section{Using TLEmix}
+At the end of this procedure the solution with  the lowest trimmed likelihood value is stored.  There is no guarantee that this value will be the global minimizer of (\ref{wtle}) but one can hope that it would be a close
+approximation to it. 
+Note that in the normal linear regression and multivariate normal cases this algorithm
+reduces to the concentration steps of the FAST-LTS and FAST-MCD algorithms, 
+respectively.
+
+To assure the existace of a solution to the optimisation problem in Eq. (\ref{wtle}), it is assumed that $k^* \geq d$ where $d$ is the so called parameter of fulness of the set $F=\{f(y_i,\theta)=-\log\varphi(y_i;\theta), \ i=1,\ldots,n \}$.   A recommendable value of $k$ would be $\lfloor (n+d+1)/2 \rfloor$ as it would maximise the breakdown point of the WTLE estimator. Any value between $d$ and $n$ can be chosen for $k$. If the expected percentage $\alpha$ of outliers in the data is a priory known, a reasonable choice of  $k$ is $\left\lfloor n(1-\alpha) \right\rfloor$   to increase the 
+efficiency of the WTLE. The subsample size $k^*$ largely depends on the fullness parameter $d$ and could be defined as $k^* = d + 1$ in order to increase the chance of drawing at least one outlier free subsample \citep[see][]{NM2003}. 
+In the mixture setting with $g$ components, the trial sample size $k^*$ must  be at least $g(p+1)$ to overcome the degenerated case of unbounded likelihood. Thus a larger trial sample size would increase the chance to allocate at least $p+1$ cases to each mixture component. If this is not the case, any program would fail to get an estimate that could serve as a trial estimate.  If this happens a new random subsample of $k^*$ observations is drawn and supplied 
+to the software estimation procedure. 
+
+Since the TLE trial and refinement steps are standard MLE procedures, the
+FAST-TLE algorithm can be easily implemented using widely available MLE software.
+The current tlemix version employs the program FlexMix of
+\cite{FL2004} and \cite{GL2008} to handle the MLE computation.
+We remind that FlexMix has been developed in R ({\tt http://www.R-project.org}) 
+as a computational engine for fitting arbitrary finite mixture models, in particular, mixtures of GLMs and model-based cluster analysis by using the EM algorithm.
+
+%\pagebreak[4]
+\section{Using tlemix}
 \label{sec:using-tlemix}
 
 \SweaveOpts{width=12,height=8,eps=FALSE}

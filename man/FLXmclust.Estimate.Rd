@@ -4,7 +4,7 @@
 \description{
   TLE - flexmix mclust model driver}
 \usage{
-	FLXmclust.Estimate(data, ind = NULL, nc, class = "auto", cluster = NULL, niter = 200, minprior = 0.1, model = NULL,ntry=9,...)
+	FLXmclust.Estimate(data, ind = NULL, nc, class = "hard", cluster = NULL, niter = 200, minprior = 0.1, model = NULL,ntry=9,...)
 }
 \arguments{
   \item{data}{ A \code{model.frame} containing the data. }

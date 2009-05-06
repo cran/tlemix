@@ -6,7 +6,7 @@
   the density function according to current parameter estimates.
 }
 \usage{
-flexmix.Estimate(data, ind = NULL, nc, class = "auto", cluster = NULL, niter = 200, minprior = 0.1, model,family,ntry=9)
+flexmix.Estimate(data, ind = NULL, nc, class = "hard", cluster = NULL, niter = 200, minprior = 0.1, model,family,ntry=9)
 }
 \arguments{
   \item{data}{ A\code{model.frame} containing the data.  }

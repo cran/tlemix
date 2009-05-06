@@ -10,7 +10,7 @@
 #########################################################################################
 
 FLXmclust.Estimate=function(data,ind=NULL, 
-  nc,class="auto",cluster=NULL,niter=200,minprior=0.1,model=NULL,ntry=9,...) {
+  nc,class="hard",cluster=NULL,niter=200,minprior=0.1,model=NULL,ntry=9,...) {
   ##       classification=c("auto", "weighted", "hard", "random")
   ## require(flexmix)
   ##
