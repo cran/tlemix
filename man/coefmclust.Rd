@@ -24,7 +24,7 @@ coefmclust(nmix)
 	This function is only used internally.
 }
 
-\seealso{ \code{\link[stats]{coef}}, \code{\link[flexmix]{parameters}} }
+\seealso{ \code{\link{coef}}, \code{\link[modeltools]{parameters}} }
 
 
 \keyword{ cluster }
