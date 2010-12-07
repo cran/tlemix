@@ -1,8 +1,8 @@
 Package: tlemix
 Type: Package
 Title: Trimmed Maximum Likelihood Estimation
-Version: 0.0.7
-Date: 2009-11-06
+Version: 0.0.8
+Date: 2010-12-07
 Author: P. Neytchev, P. Filzmoser, R. Patnaik, A. Eisl and R. Boubela
 Depends: flexmix
 Imports: methods, flexmix, modeltools, stats4
@@ -13,6 +13,6 @@ Description: TLE implements a general framework for robust fitting of
         the EM algorithm.
 License: GPL (>= 3)
 LazyLoad: no
-Packaged: 2009-11-06 18:41:26 UTC; root
+Packaged: 2011-01-17 05:40:32 UTC; root
 Repository: CRAN
-Date/Publication: 2009-11-08 10:24:28
+Date/Publication: 2011-01-17 08:13:52

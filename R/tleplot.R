@@ -33,5 +33,5 @@ setMethod("tleplot",
 				string[i] <- paste("Cluster", i)
 			}
 			string[n+1] <- "Outliers"
-			legend("bottomright", string, col=(n+1):1, pch=cbind(rep(1,n),2))
+			legend("bottomright", string, col=(n+1):1, pch=cbind(rep(16,n),2))
 		})

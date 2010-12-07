@@ -13,7 +13,7 @@
    and FLXmclust.Density (FLXmclust.Estimate) for model based clustering.
 }
 \usage{
-	TLE(formula,family,data,kStar=NULL, kTrim=NULL, nit = 10, msglvl = 0, result = NULL, cit = 9, test = NULL,nc, Density, Estimate, ...)
+	TLE(formula,family,data,kStar=NULL, kTrim=NULL, nit = 10, msglvl = 0, result = NULL, cit = 9, test = NULL,nc=1, Density, Estimate, ...)
 }
 \arguments{
   \item{formula}{An object of class formula.}

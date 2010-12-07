@@ -11,7 +11,7 @@
   \item{ind}{ Data subset }
   \item{nc}{ Number of clusters }
   \item{class}{ Classification method used: \code{auto}, \code{weighted}, \code{hard} or \code{random} }
-  \item{cluster}{  }
+  \item{cluster}{ optional vector of working class memberships }
   \item{niter}{ Number of iterations }
   \item{minprior}{ Minimum number of observations per component}
   \item{model}{Model used to extract model formula}

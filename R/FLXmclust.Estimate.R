@@ -71,8 +71,8 @@ FLXmclust.Estimate=function(data,ind=NULL,
 
   ##................................................................................
   if(T&&!stop) { # the last iterations must be carried out with posterior weights!
-	if(class!="weighted" && class!="auto") 
-      {	control$class="weighted"
+	if(class!="weighted" && class!="auto") {
+      		control$class="weighted"
 		control$iter=nmix@iter      # no more iteration than in previous step
                                         #control$iter=3	
 		tmp_nmix<-nmix
@@ -85,7 +85,7 @@ FLXmclust.Estimate=function(data,ind=NULL,
 		
 		old.logLik = nmix@logLik
 		itry =0                         # current try number
-		while(itry<=ntry)
+		while(itry<=ntry) {
           ##nmix <-	try(flexmix(mat~1,				# as.matrix(d)~1,
           nmix <- try(flexmix(model,
                               data,
@@ -97,6 +97,7 @@ FLXmclust.Estimate=function(data,ind=NULL,
         if(itry>ntry) break             # no more than ntry tries
         itry<-itry+1
       }
+    }
     if(itry>ntry) return(NULL)          # no solution
     new.logLik = nmix@logLik
     ## if(new.logLik>old.logLik) cat(">")
