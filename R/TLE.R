@@ -91,7 +91,10 @@ setMethod("show", "summary.TLE",
 #######################################
 ### In vielen Fallen mochte man auch plot-Methoden fur eine S4-Klasse erstellen.
 ### Dies funktioniert z.B. folgenderma_en:
-if(!isGeneric("plot")) setGeneric("plot")
+
+
+##if(!isGeneric("plot")) setGeneric("plot")
+setGeneric("plot")
 setMethod("plot", signature("TLE","missing"),
         #function(x, y = NULL, ...){
         function(x,y=NULL,...) {
@@ -134,7 +137,7 @@ print(proc.time())
             ## proposed default parameter
             k = trunc((nobs + nc * (dimension + 1) + 1)/2)
 
-            if(is.null(kTrim)) { 
+            if(is.null(kTrim)) {
               kTrim = k
             } else if(kTrim<1) {
                 kTrim = round(kTrim*nobs)
@@ -227,7 +230,7 @@ print(proc.time())
                 cluster = wrk$c                 # estimated clusters
                 ccomp   = wrk$cc                # estimated clusters
                 ncomp   = dim(wrk$cc)[2]        # number of components
-                                        
+
                 qtmp    = loglik[ind]           # loglikelihood of the data points in the subsample
                 if(any(is.na(qtmp))) next()     # incorrect estimate
                 Qold    = sum(qtmp)             # LogLikelihood of selected data
@@ -259,8 +262,8 @@ print(proc.time())
                   cluster       = wrk$c                  # estimated clusters
                   ccomp = wrk$cc                         # estimated clusters
                   ncomp = dim(wrk$cc)[2]                 # number of components
-                                                         
-                  qtmp  = loglik[kSort]                  
+
+                  qtmp  = loglik[kSort]
                   if(any(is.na(qtmp))) break()           # incorrect estimate
                   Qnew  = sum(qtmp)                      # LogLikelihood of selected data
 
