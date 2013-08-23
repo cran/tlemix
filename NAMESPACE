@@ -1,7 +1,6 @@
-import(flexmix)
-import(graphics)
 import(methods)
-
+#importFrom("graphics",plot)
+#importFrom("flexmix",flexmix)
 
 export(
 	coefglm,

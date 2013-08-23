@@ -13,7 +13,8 @@
    and FLXmclust.Density (FLXmclust.Estimate) for model based clustering.
 }
 \usage{
-	TLE(formula,family,data,kStar=NULL, kTrim=NULL, nit = 10, msglvl = 0, result = NULL, cit = 9, test = NULL,nc=1, Density, Estimate, ...)
+	TLE(formula,family,data,kStar=NULL, kTrim=NULL, nit = 10, msglvl = 0, 
+        result = NULL, cit = 9, test = NULL,nc=1, Density, Estimate, ...)
 }
 \arguments{
   \item{formula}{An object of class formula.}
@@ -41,12 +42,13 @@
 \url{http://www.statistik.tuwien.ac.at/public/filz/}}
 \seealso{ \code{\link[flexmix]{flexmix}} }
 \examples{
-
 data(gaussData)
-est.tle	= TLE(y~x,"gaussian",data=gaussData,nit=4, msglvl=1, cit=3, Density=flexmix.Density, Estimate=flexmix.Estimate, nc=2)
+# This example takes some seconds:
+#est.tle	<- TLE(y~x,"gaussian",data=gaussData,nit=4, msglvl=1, cit=3, 
+#           Density=flexmix.Density, Estimate=flexmix.Estimate, nc=2)
 
 # Plot the 2-dimensional data			
-tleplot(est.tle, gaussData)
+#tleplot(est.tle, gaussData)
 
 }
 \keyword{ robust }
